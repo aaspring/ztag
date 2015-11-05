@@ -1,7 +1,7 @@
 from ztag.transform import ZGrabTransform, ZMapTransformOutput
 from ztag import protocols, errors
 from ztag.transform import Transformable
-import https
+import tlsutil
 
 class FTPTransform(ZGrabTransform):
 
@@ -18,12 +18,12 @@ class FTPTransform(ZGrabTransform):
         ftp = Transformable(obj)
         zout = ZMapTransformOutput()
         error = ftp['error'].resolve()
-        if error is not None:
+        if error != None:
             raise errors.IgnoreObject("Error")
         out = dict()
         banner = ftp['data']['banner'].resolve()
 
-        if banner is not None:
+        if banner != None:
             out['banner'] = self.clean_banner(banner)
 
         if len(out) == 0:
@@ -47,13 +47,13 @@ class FTPSTransform(ZGrabTransform):
         ftp = Transformable(obj)
         zout = ZMapTransformOutput()
         error = ftp['error'].resolve()
-        if error is not None:
+        if error != None:
             raise errors.IgnoreObject("Error")
 
         out = dict()
         banner = ftp['data']['ftp']['banner'].resolve()
 
-        if banner is not None:
+        if banner != None:
             out['banner'] = self.clean_banner(banner)
 
         if len(out) == 0:
@@ -61,7 +61,7 @@ class FTPSTransform(ZGrabTransform):
 
         if "tls" in obj['data']:
             tls = obj['data']['tls']
-            peerCertData, certificates = https.HTTPSTransform.make_tls_obj(tls)
+            peerCertData, certificates = tlsutil.make_tls_obj(tls)
             out["tls"] = peerCertData
             zout.certificates = certificates
 
